@@ -1,13 +1,17 @@
 # -*- encoding: UTF-8 -*-
 '''
 Created on 22 feb. 2018
+Tipo de sensor FSR
+@info: http://doc.aldebaran.com/1-14/family/robots/fsr_robot.html
 @info: http://doc.aldebaran.com/1-14/dev/python/examples/sensors/index.html#python-example-sensors
 @author: Andres
+nota: 
+complemento de sensores: http://doc.aldebaran.com/2-4/naoqi/core/almemory-tuto.html
 '''
 from naoqi import ALProxy
 
-IP = "127.0.0.1" # set your Ip address here
-PORT = 49260#9559
+IP = "192.168.1.39" # set your Ip address here
+PORT = 9559 #49260
 
 # ====================
 # Create proxy to ALMemory
