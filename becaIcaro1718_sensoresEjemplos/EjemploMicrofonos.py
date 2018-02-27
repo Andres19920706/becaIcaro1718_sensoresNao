@@ -15,6 +15,7 @@ PORT = 9559 #49260
 # Create proxy to ALMemory
 
 recog = ALProxy("ALSpeechRecognition", IP, PORT)
+#recog = ALProxy("ALSoundDetection", IP, PORT)
 print "Lenguajes Avilitados: "+str(recog.getAvailableLanguages())
 print "Lenguaje establecido: "+str(recog.getLanguage())
 #Parámetros de reconocimeinto de voz
