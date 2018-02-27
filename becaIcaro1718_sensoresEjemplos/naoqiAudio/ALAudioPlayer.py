@@ -3,13 +3,16 @@
 Created on 27 feb. 2018
 API de AudioPlayer
 Clase generada apartir de http://doc.aldebaran.com/2-4/naoqi/audio/alaudioplayer.html
+@info: http://ii.tudelft.nl/naodoc/site_en/bluedoc/ALAudioPlayer.html
+En la versión 2.4., esta API solo es accedida como servicio.
 @author: Andres Ruiz  Pe�uela
 @fecha: 180227
 @version: 0.0.1
 '''
-import qi
+
 from naoqi import ALProxy
 import logging as log
+import sys
 
 class ALAudioPlayer (object):
     
@@ -17,28 +20,37 @@ class ALAudioPlayer (object):
         #Construcctor inicial
         self.IP = IP
         self.PORT = PORT
-        self.proyAPlayer = None
-        #self.session = qi.Session()
-        #self.session.connect("tcp://" + self.IP + ":" + str(self.PORT))
+        self.audio_player_service = None
+        
     
-    def conexion(self):
-        #Método para establecer la coneixón con la API de AudioPlayer
+    def conexion(self,session):
+        #Método para establecer la conexión con la API de AudioPlayer    
         try:
-            #self.proxyAPlayer = ALProxy("ALAudioPlayer") #Cuando se ha establecido na sesión previamente
-            self.proxyAPlayer = ALProxy("ALAudioPlayer", self.IP, self.PORT)
+            self.audio_player_service = session.service('ALAudioPlayer')
         except Exception, e:
-            log.error("No se ha podido conectar, "+e)
+            log.error("\nNo se ha podido conectar, "+str(e))
+            sys.exit(1)
     
-     def loadFile(self, fileName):
+    def loadFile(self, fileName):
         """
-        Carga el 
-        Loads a file for ulterior playback
-        :param str fileName: Path of the sound file (either mp3 or wav)
-        :returns int: Id of the file which has been loaded. This file can then be played with the play function
+        Carga el aricho para reproducirlo
+        :param str fileName: Dirección absoluta del archivo de sonido ( mp3 o wav)
+        :returns int: Identificador del archivo que se ha cargado.
         """
-        if not self.proxy:
-            self.proxy = ALProxy("ALAudioPlayer")
-        return self.proxy.loadFile(fileName)
+        #====
+        framemanager = ALProxy("ALFrameManager",self.IP,self.PORT)
+        
+        #print str( framemanager.getBehaviorPath(self.behaviorId)+"prueba2.wav")
+        #=====
+        fileId = None
+        
+        if not self.audio_player_service:
+            log.error("\nPara usar este método debes establecer un servicio previo. ")
+        else:
+            fileId = self.audio_player_service.loadFile(fileName)
+            self.audio_player_service.play(fileId, _async=True)
+        
+        return fileId 
     
     def getCurrentPosition(self,playId):
         """
@@ -46,10 +58,10 @@ class ALAudioPlayer (object):
         @param int playId: Identificador del proceso que se está reproducciendo
         @return float: Posición del archivo en segundos
         """
-        if not self.proxyAPlayer:
+        if not self.audio_player_service:
             self.conexion()
             
-        return self.proxyAPlayer.getCurrentPosition(playId)
+        return self.audio_player_service.getCurrentPosition(playId)
     
     def getVolume(self, playId):
         """
@@ -57,6 +69,12 @@ class ALAudioPlayer (object):
         @param int playId: Identificador del proceso que esta reproduciendo el archivo.
         @returns float: Volumen de la reproducción [0.0 ~ 1.0 ]
         """
-        if not self.proxy:
-            self.proxy = ALProxy("ALAudioPlayer")
-        return self.proxy.getVolume(playId)
+        if not self.audio_player_service:
+            self.conexion()
+            
+        return self.audio_player_service.getVolume(playId)
+    
+    
+
+
+        
