@@ -4,6 +4,8 @@ from Memory import ALMemory
 import time
 import logging as Log
 
+import naoqi
+
 SoundLoc = ALSoundLocatlization("192.168.1.39")
 MemoryProxy = ALMemory("192.168.1.39")
 
@@ -24,17 +26,25 @@ if SoundLoc.ping():
 #Vemos la lista de eventos actuales en ALMemory
 print SoundLoc.getEventList()
 
+#SoundLoc.setParameter("EnergyComputation",True)
 #Nos subscrimos para generar el evento ALMoundLocalization/SoundLocated "ALMemory" 
-SoundLoc.subscribe2("Andres")
+#SoundLoc.subscribe2("Andres")
 
-MemoryProxy.subscribeToMicroEvent()
+#MemoryProxy.subscribeToMicroEvent()
+while True:
+    print MemoryProxy.getData()
+    time.sleep(1)
 
+print MemoryProxy.getSubscribers("ALSoundLocalization/SoundLocated")
 time.sleep(10)
 
 print "Fin"
+
+#
+
 #Anulamos la subscripción para dejar de generar el evento ALMoundLocalization/SoundLocated "ALMemory" 
 #SoundLoc.unsubscribe("Andres")
-
+#SoundLoc.setParameter("EnergyComputation",False)
 
 #exit(1)
 #C

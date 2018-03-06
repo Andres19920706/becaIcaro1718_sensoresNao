@@ -31,6 +31,33 @@ class ALMemory(object):
         self.PROXY = ALProxy("ALMemory",self.IP,self.PORT)#
     
      # ================== métodos heredados de ALMemoryProxy =================
+    def getSubscribers(self,name):
+        """
+        Obtiene una lista que contiene los nombres de los suscriptores de un evento
+        @param str name: Nombre del evento o microevento
+        @return Lista de nombres de subscriptores
+        """
+        out = None
+        try:
+            if not self.PROXY:
+                self.conection()
+            out = self.PROXY.getSubscribers(name)
+        except Exception, e:
+            Log.error("Server>>\n"+str(e))
+        
+        return out
+    
+    def getData(self):
+        out = None
+        try:
+            if not self.PROXY:
+                self.conection()
+            out = self.PROXY.getData("ALSoundLocalization/SoundLocated")
+        except Exception, e:
+            Log.error("Server>>\n"+str(e))
+        
+        return out
+        
     def getMicroEventList(self ):
         """
         Obtiene una lista que contiene los nombres de todos los micro-eventos declarados.
@@ -53,7 +80,7 @@ class ALMemory(object):
             if not self.PROXY:
                 self.conection()
             print "entro"
-            out = self.PROXY.subscribeToMicroEvent("ALSoundLocalization/SoundLocated", "pythonModule", "message", "pythondatachanged")
+            out = self.PROXY.subscribeToMicroEvent("prueba", "res", "message", "pythondatachanged")
             print "salgo"
         except Exception, e:
             Log.error("Server>>\n"+str(e))
