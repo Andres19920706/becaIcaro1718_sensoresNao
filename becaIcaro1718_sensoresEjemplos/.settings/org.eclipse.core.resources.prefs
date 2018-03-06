@@ -1,4 +1,8 @@
 eclipse.preferences.version=1
+encoding//FaceTrakert/ALFaceTrakert.py=UTF-8
+encoding//SoundDetection/Memory.py=UTF-8
+encoding//SoundDetection/SoundLocalization.py=UTF-8
+encoding//SoundDetection/__init__.py=UTF-8
 encoding//naoqiAudio/ALAUDIODEVICE.py=UTF-8
 encoding//naoqiAudio/ALAudioPlayer.py=UTF-8
 encoding//naoqiAudio/ALSoundDetection.py=UTF-8
