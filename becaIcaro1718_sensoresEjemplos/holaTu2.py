@@ -58,7 +58,7 @@ class HumanGreeterModule(ALModule):
         memory.unsubscribeToEvent("SoundDetected",
             "HumanGreeter")
 
-        self.tts.say("¿Que ha sido eso? ")
+        self.tts.say("Mooooozaa")
 
         # Subscribe again to the event
         memory.subscribeToEvent("SoundDetected",
