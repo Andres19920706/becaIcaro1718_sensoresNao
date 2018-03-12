@@ -6,11 +6,13 @@ Created on 9 mar. 2018
 '''
 import sys
 import time
+import scipy
+import numpy
 
 from naoqi import ALProxy
 from naoqi import ALModule
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 NAO_IP = "192.168.1.39"
 
@@ -46,9 +48,9 @@ class HumanSoundModule(ALModule):
         
         print "Sonido detectado"
         x = memory.getData("ALSoundLocalization/SoundLocated")
-        print "Datos obtenidos: "+str(x[1])
-        print "Azimut: "+str(x[1][0])+"rad, "+str(x[1][0]*3.141516/180)+"�"
-        print "Altitud: "+str(x[1][1])+"rad, "+str(x[1][1]*3.141516/180)+"�"
+        print "SoundLocated = "+str(x)
+        print "Azimut: "+str(x[1][0])+"rad, "+str(x[1][0]*scipy.pi/180)+" grados"
+        print "Altitud: "+str(x[1][1])+"rad, "+str(x[1][1]*scipy.pi/180)+" grados"
         print "Confizanza de voz humana: "+str(x[1][2])
         print "Energía: "+str(x[1][3])
         
@@ -58,7 +60,6 @@ class HumanSoundModule(ALModule):
         print "HEAD_PITCH: "+str(headPitch)
         print "HEAD_YAW: "+str(headYaw)
         
-        """"
         # -------------- extracción de imagen -----------------
         camProxy = ALProxy("ALVideoDevice")
         resolution = 2    # VGA
@@ -80,12 +81,23 @@ class HumanSoundModule(ALModule):
         # Create a PIL Image from our pixel array.
         im = Image.frombytes("RGB", (imageWidth, imageHeight), array)
 
+        
+        #Añadimaos punto
+        draw = ImageDraw.Draw(im)
+        font = ImageFont.truetype("arial.ttf", 60)
+        #draw.text((50, 50), "x", font=font, fill="red")
+        y = 1* numpy.sin(x[1][1]*scipy.pi/180)
+        x = 1* numpy.cos(x[1][0]*scipy.pi/180)
+        draw.text((x,y), "x", font=font, fill="red")
+        
         # Save the image.
         im.save("camImage.png", "PNG")
-
+        
+        #Mostramos
         im.show()
+        
         # -----------------------------------------------------
-        """
+
         # Unsubscribe to the event when talking,
         # to avoid repetitions
         memory.unsubscribeToEvent("SoundDetected",
