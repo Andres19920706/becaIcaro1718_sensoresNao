@@ -6,9 +6,9 @@ Created on 9 mar. 2018
 '''
 import sys
 import time
-import scipy
-import numpy
 
+import numpy
+import math
 from naoqi import ALProxy
 from naoqi import ALModule
 
@@ -49,8 +49,8 @@ class HumanSoundModule(ALModule):
         print "Sonido detectado"
         x = memory.getData("ALSoundLocalization/SoundLocated")
         print "SoundLocated = "+str(x)
-        print "Azimut: "+str(x[1][0])+"rad, "+str(x[1][0]*scipy.pi/180)+" grados"
-        print "Altitud: "+str(x[1][1])+"rad, "+str(x[1][1]*scipy.pi/180)+" grados"
+        print "Azimut: "+str(x[1][0])+"rad, "+str(math.degrees(x[1][0]))+" grados"
+        print "Altitud: "+str(x[1][1])+"rad, "+str(math.degrees(x[1][1]))+" grados"
         print "Confizanza de voz humana: "+str(x[1][2])
         print "Energía: "+str(x[1][3])
         
@@ -59,7 +59,7 @@ class HumanSoundModule(ALModule):
         headYaw = memory.getData("Device/SubDeviceList/HeadYaw/Position/Actuator/Value")
         print "HEAD_PITCH: "+str(headPitch)
         print "HEAD_YAW: "+str(headYaw)
-        
+        """
         # -------------- extracción de imagen -----------------
         camProxy = ALProxy("ALVideoDevice")
         resolution = 2    # VGA
@@ -86,8 +86,10 @@ class HumanSoundModule(ALModule):
         draw = ImageDraw.Draw(im)
         font = ImageFont.truetype("arial.ttf", 60)
         #draw.text((50, 50), "x", font=font, fill="red")
-        y = 1* numpy.sin(x[1][1]*scipy.pi/180)
-        x = 1* numpy.cos(x[1][0]*scipy.pi/180)
+        #y = 1* numpy.sin(x[1][1]*scipy.pi/180)
+        #x = 1* numpy.cos(x[1][0]*scipy.pi/180)
+        y = x[2][3]
+        x = x[2][4]
         draw.text((x,y), "x", font=font, fill="red")
         
         # Save the image.
@@ -95,7 +97,7 @@ class HumanSoundModule(ALModule):
         
         #Mostramos
         im.show()
-        
+        """
         # -----------------------------------------------------
 
         # Unsubscribe to the event when talking,
