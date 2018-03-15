@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//FaceTrakert/ALFaceTrakert.py=UTF-8
+encoding//Motion/ALMotion.py=UTF-8
 encoding//Motion/PositionInitial.py=UTF-8
 encoding//Motion/PositionZero.py=UTF-8
 encoding//Motion/StiffnesOffs.py=UTF-8

@@ -56,7 +56,6 @@ def main():
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print
         print "Interrupted by user, shutting down"
         myBroker.shutdown()
         sys.exit(0)

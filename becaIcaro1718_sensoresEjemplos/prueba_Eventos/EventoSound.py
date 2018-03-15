@@ -45,7 +45,13 @@ class HumanSoundModule(ALModule):
         """ 
         El método onFaceDetected es llamado cuando detecta un sonido.
         """
+        t0 = time.time() #Tiempo en que se detecto el sonido
+        # Unsubscribe to the event when talking,
+        # to avoid repetitions
+        memory.unsubscribeToEvent("SoundDetected",
+            "HumanSound")
         
+        # ------------------
         print "Sonido detectado"
         x = memory.getData("ALSoundLocalization/SoundLocated")
         print "SoundLocated = "+str(x)
@@ -59,19 +65,19 @@ class HumanSoundModule(ALModule):
         headYaw = memory.getData("Device/SubDeviceList/HeadYaw/Position/Actuator/Value")
         print "HEAD_PITCH: "+str(headPitch)
         print "HEAD_YAW: "+str(headYaw)
-        """
+        
         # -------------- extracción de imagen -----------------
         camProxy = ALProxy("ALVideoDevice")
-        resolution = 2    # VGA
-        colorSpace = 11   # RGB
+        resolution = 2    # kVGA 640x480
+        colorSpace = 11 #11   # RGB
         
         videoClient = camProxy.subscribe("python_client", resolution, colorSpace, 5)
 
-        t0 = time.time()
+        #t0 = time.time()
         naoImage = camProxy.getImageRemote(videoClient)
 
-        t1 = time.time()
-        print "acquisition delay ", t1 - t0
+        t1 = time.time() #Tiempo en que se obtuvo la imagen
+        print "Tiempo trascurrido del sonido a la imagen (s)", t1 - t0
 
         camProxy.unsubscribe(videoClient)
         imageWidth = naoImage[0]
@@ -88,25 +94,47 @@ class HumanSoundModule(ALModule):
         #draw.text((50, 50), "x", font=font, fill="red")
         #y = 1* numpy.sin(x[1][1]*scipy.pi/180)
         #x = 1* numpy.cos(x[1][0]*scipy.pi/180)
-        y = x[2][3]
-        x = x[2][4]
-        draw.text((x,y), "x", font=font, fill="red")
         
-        # Save the image.
-        im.save("camImage.png", "PNG")
+        AlfaH = math.radians(60.97/2) #Ángulo de visión "azimut"
+        AlfaHp = x[1][0] #Ángulo de azimut obtenido [rad] 
         
+        AlfaV = math.radians(39) #Ángulo de visión "elevacion"
+        AlfaVp = x[1][1] #Ángulo de azimut obtenido [rad]
+        #Debu
+        if math.fabs(AlfaHp)>AlfaH : print "Fuera del campo de vision horizontal"
+        if math.fabs(AlfaVp)>AlfaV : print "Fuera del campo de vision vertial"
+        #fin debug
+        if(math.fabs(AlfaHp)>AlfaH or math.fabs(AlfaVp)>AlfaV):
+            print "Audio fuera del alcanze de vision"
+        else:
+            #Azimut
+            
+            npixX = 340*(math.tan(AlfaHp)/math.tan(AlfaH))
+            x = (680/2) - npixX
+
+
+            
+            #Elevacion
+            npixY = 240*(math.tan(AlfaVp)/math.tan(AlfaV))
+            y = 480 + npixY
+             
+
+
+            #Representar punto
+            print "npixX= "+str(npixX)+", npixY= "+str(npixY)
+            print "Cordeandas -> ("+str(x)+","+str(y)+")"
+            draw.text((x,y), ".", font=font, fill="red")
+            
+            # Save the image.
+            im.save("camImagen.png", "PNG")
+
         #Mostramos
         im.show()
-        """
+        
         # -----------------------------------------------------
-
-        # Unsubscribe to the event when talking,
-        # to avoid repetitions
-        memory.unsubscribeToEvent("SoundDetected",
-            "HumanSound")
-
+        
         self.tts.say(" e")
-
+        
         # Subscribe again to the event
         memory.subscribeToEvent("SoundDetected",
             "HumanSound",
