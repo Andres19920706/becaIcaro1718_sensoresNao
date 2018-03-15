@@ -5,6 +5,7 @@ encoding//Motion/PositionInitial.py=UTF-8
 encoding//Motion/PositionZero.py=UTF-8
 encoding//Motion/StiffnesOffs.py=UTF-8
 encoding//Motion/__init__.py=UTF-8
+encoding//Motion/movientoCabeza.py=UTF-8
 encoding//SoundDetection/Memory.py=UTF-8
 encoding//SoundDetection/SoundLocalization.py=UTF-8
 encoding//SoundDetection/__init__.py=UTF-8
