@@ -35,9 +35,9 @@ time.sleep(1.0)
 
 #o
 names      = ["HeadYaw", "HeadPitch"]
-angleLists = [0.5,-0.5]
-timeLists  = [1.0, 1.2]
-isAbsolute = True
+angleLists = [0,-0.671951] #Radianes info: Guía del desarrollador-articulaciones
+timeLists  = [1.0, 1.2] #Segundos
+isAbsolute = True #Ángulo absoluto 
 motionProxy.angleInterpolation(names, angleLists, timeLists, isAbsolute)
 
 
